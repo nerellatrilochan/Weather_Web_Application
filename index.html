@@ -90,25 +90,27 @@
         </form>
       </section>
 
-      <!-- Placeholder sections (replaced with real cards in M3 & M4) -->
-      <section class="placeholder-section" aria-label="Weather content placeholders">
-
-        <div class="placeholder-card">
-          <p class="placeholder-card__title">Milestone 3</p>
-          <p>Current Weather Card — coming soon</p>
-        </div>
-
-        <div class="placeholder-card">
-          <p class="placeholder-card__title">Milestone 4</p>
-          <p>5-Day Forecast Strip — coming soon</p>
-        </div>
-
-        <div class="placeholder-card">
-          <p class="placeholder-card__title">Milestone 4</p>
-          <p>Hourly Micro-Data Insights — coming soon</p>
-        </div>
-
-      </section>
+        <!-- Friendly hint shown before any city is searched -->
+        <p id="empty-state" class="empty-state">
+            Search for a city to see current weather, forecast, and hourly insights.
+        </p>
+    
+        <!-- Weather content — hidden until search returns data (built in later steps) -->
+        <section id="weather-content" class="weather-content" hidden aria-live="polite">
+    
+            <article id="current-weather" class="current-weather" aria-label="Current weather">
+                <!-- Populated after search -->
+            </article>
+    
+            <section id="forecast-strip" class="forecast-strip" aria-label="5-day forecast">
+                <!-- Populated after search -->
+            </section>
+    
+            <section id="hourly-insights" class="hourly-insights" aria-label="Hourly micro-data insights">
+                <!-- Populated after search -->
+            </section>
+    
+        </section>
 
     </main>
 

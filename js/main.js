@@ -41,7 +41,7 @@ function initSearchForm() {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     // Milestone 2: add search logic here
-    console.log("Search will be implemented in Milestone 2");
+    //console.log("Search will be implemented in Milestone 2");
   });
 }
 
