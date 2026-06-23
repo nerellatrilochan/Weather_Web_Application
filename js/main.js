@@ -1,6 +1,7 @@
 // js/main.js
 
 import { getSavedTheme, applyTheme, getOppositeTheme } from "./theme.js";
+import { getLastCity, saveLastCity, clearLastCity } from "./storage.js";
 import {
   fetchWeatherByCity,
   CityNotFoundError,
@@ -11,6 +12,7 @@ import {
   renderForecastStrip,
   renderHourlyInsights,
   showWeatherContent,
+  hideWeatherContent,
 } from "./ui.js";
 
 function initThemeToggle() {
@@ -89,6 +91,8 @@ async function handleSearch(cityName) {
     renderForecastStrip(weatherData.forecast, weatherData.location.timezone);
     renderHourlyInsights(weatherData.forecast, weatherData.location.timezone);
     showWeatherContent();
+
+    saveLastCity(cityName);
   } catch (error) {
     console.error("Search failed:", error);
 
@@ -108,6 +112,18 @@ async function handleSearch(cityName) {
   }
 }
 
+function handleClearCity() {
+  clearLastCity();
+  hideWeatherContent();
+
+  const cityInput = document.getElementById("city-input");
+  if (cityInput) {
+    cityInput.value = "";
+  }
+
+  hideError();
+}
+
 function initSearchForm() {
   const form = document.getElementById("search-form");
   const cityInput = document.getElementById("city-input");
@@ -120,12 +136,40 @@ function initSearchForm() {
   });
 }
 
+function initClearCity() {
+  const card = document.getElementById("current-weather");
+
+  if (!card) return;
+
+  card.addEventListener("click", (event) => {
+    if (event.target.closest(".clear-city-btn")) {
+      handleClearCity();
+    }
+  });
+}
+
+function restoreLastCity() {
+  const savedCity = getLastCity();
+
+  if (!savedCity) return;
+
+  const cityInput = document.getElementById("city-input");
+  if (cityInput) {
+    cityInput.value = savedCity;
+  }
+
+  handleSearch(savedCity);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   applyTheme(getSavedTheme());
   initThemeToggle();
   initNavLinks();
   initSearchForm();
+  initClearCity();
 
   setLoading(false);
   hideError();
+
+  restoreLastCity();
 });

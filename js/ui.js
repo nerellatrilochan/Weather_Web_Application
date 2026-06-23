@@ -10,7 +10,7 @@ import {
     buildHourlyInsights,
   } from "./weather.js";
   
-  /* ── Small inline SVGs for stat badges, date & chart icon ── */
+  /* ── Small inline SVGs for stat badges, date, chart & clear icon ── */
   
   const ICON_CALENDAR = `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <rect x="3" y="4" width="18" height="18" rx="2"/>
@@ -37,6 +37,11 @@ import {
     <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
   </svg>`;
   
+  const ICON_CLEAR = `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="18" y1="6" x2="6" y2="18"/>
+    <line x1="6" y1="6" x2="18" y2="18"/>
+  </svg>`;
+  
   /**
    * Show weather sections, hide empty-state hint.
    */
@@ -50,7 +55,7 @@ import {
   
   /**
    * Hide weather sections, show empty-state hint.
-   * (Used in Milestone 5 for reset.)
+   * Used when the user clears the saved city.
    */
   export function hideWeatherContent() {
     const emptyState = document.getElementById("empty-state");
@@ -99,7 +104,12 @@ import {
   
     card.innerHTML = `
       <header class="current-weather__header">
-        <h2 class="current-weather__location">${locationLabel}</h2>
+        <div class="current-weather__title-row">
+          <h2 class="current-weather__location">${locationLabel}</h2>
+          <button type="button" class="clear-city-btn" aria-label="Clear saved city and reset">
+            ${ICON_CLEAR}
+          </button>
+        </div>
         <p class="current-weather__date">
           ${ICON_CALENDAR}
           <time datetime="${current.time}">${dateStr}</time>

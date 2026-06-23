@@ -249,12 +249,54 @@
     margin-bottom: 20px;
   }
   
+  /* Milestone 5 — city name + clear button row */
+  .current-weather__title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  
   .current-weather__location {
     font-size: 1.15rem;
     font-weight: 700;
     color: var(--color-text-primary);
-    margin-bottom: 6px;
+    margin: 0;
     line-height: 1.3;
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .clear-city-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+  
+  .clear-city-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .clear-city-btn:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-stat-badge-bg);
+  }
+  
+  .clear-city-btn:focus-visible {
+    outline: 2px solid var(--color-accent-orange);
+    outline-offset: 2px;
   }
   
   .current-weather__date {
