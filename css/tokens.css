@@ -23,6 +23,11 @@
   --color-accent-orange: #e76f51;
   --color-accent-orange-nav: #f4a261;
 
+  /* Error */
+  --color-error-bg: #fef2f2;
+  --color-error-text: #b91c1c;
+  --color-error-border: #fecaca;
+
   /* Borders & shadows */
   --color-border: #e2e8f0;
   --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
@@ -59,6 +64,10 @@
   --color-accent-teal-hover: #35a896;
   --color-accent-orange: #f4a261;
   --color-accent-orange-nav: #f4a261;
+
+  --color-error-bg: #3b1c1c;
+  --color-error-text: #fca5a5;
+  --color-error-border: #7f1d1d;
 
   --color-border: #2e2e42;
   --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.3);

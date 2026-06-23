@@ -88,29 +88,40 @@
             SEARCH
           </button>
         </form>
+
+        <!-- Error banner — shown when search fails -->
+        <div id="error-banner" class="error-banner" role="alert" hidden>
+          <span id="error-message"></span>
+        </div>
+
+        <!-- Loading spinner — shown while fetching data -->
+        <div id="loading-indicator" class="loading-indicator" hidden aria-live="polite">
+          <div class="spinner" aria-hidden="true"></div>
+          <span>Fetching weather data...</span>
+        </div>
       </section>
 
-        <!-- Friendly hint shown before any city is searched -->
-        <p id="empty-state" class="empty-state">
-            Search for a city to see current weather, forecast, and hourly insights.
-        </p>
-    
-        <!-- Weather content — hidden until search returns data (built in later steps) -->
-        <section id="weather-content" class="weather-content" hidden aria-live="polite">
-    
-            <article id="current-weather" class="current-weather" aria-label="Current weather">
-                <!-- Populated after search -->
-            </article>
-    
-            <section id="forecast-strip" class="forecast-strip" aria-label="5-day forecast">
-                <!-- Populated after search -->
-            </section>
-    
-            <section id="hourly-insights" class="hourly-insights" aria-label="Hourly micro-data insights">
-                <!-- Populated after search -->
-            </section>
-    
+      <!-- Friendly hint shown before any city is searched -->
+      <p id="empty-state" class="empty-state">
+        Search for a city to see current weather, forecast, and hourly insights.
+      </p>
+
+      <!-- Weather content — hidden until search returns data (built in later steps) -->
+      <section id="weather-content" class="weather-content" hidden aria-live="polite">
+
+        <article id="current-weather" class="current-weather" aria-label="Current weather">
+          <!-- Populated after search -->
+        </article>
+
+        <section id="forecast-strip" class="forecast-strip" aria-label="5-day forecast">
+          <!-- Populated after search -->
         </section>
+
+        <section id="hourly-insights" class="hourly-insights" aria-label="Hourly micro-data insights">
+          <!-- Populated after search -->
+        </section>
+
+      </section>
 
     </main>
 
