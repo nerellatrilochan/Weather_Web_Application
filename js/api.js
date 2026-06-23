@@ -2,10 +2,10 @@
 
 const GEOCODING_URL = "https://geocoding-api.open-meteo.com/v1/search";
 const FORECAST_URL = "https://api.open-meteo.com/v1/forecast";
+const REQUEST_TIMEOUT_MS = 15000;
 
 /**
- * Custom error thrown when the geocoding API finds no matching city.
- * Using a custom class lets main.js show a specific user-friendly message.
+ * Custom error when geocoding finds no city.
  */
 export class CityNotFoundError extends Error {
   constructor(message = "City not found.") {
@@ -15,7 +15,7 @@ export class CityNotFoundError extends Error {
 }
 
 /**
- * Custom error thrown when the user submits an empty search.
+ * Custom error when search input is empty.
  */
 export class EmptySearchError extends Error {
   constructor(message = "Please enter a city name.") {
@@ -25,18 +25,42 @@ export class EmptySearchError extends Error {
 }
 
 /**
- * Step 1: Convert a city name into coordinates using Open-Meteo Geocoding API.
+ * Fetch with a timeout so loading never spins forever.
+ */
+async function fetchWithTimeout(url) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(url, { signal: controller.signal });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+
+    return response.json();
+  } catch (error) {
+    if (error.name === "AbortError") {
+      throw new Error(
+        "Request timed out. Use Live Server (http://localhost) and check your internet."
+      );
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
+/**
+ * Step 1: City name → coordinates
+ * Docs: https://open-meteo.com/en/docs/geocoding-api
  */
 async function searchCity(cityName) {
-  const url = `${GEOCODING_URL}?name=${encodeURIComponent(cityName)}&count=1`;
+  const url = `${GEOCODING_URL}?name=${encodeURIComponent(cityName)}&count=1&language=en`;
 
-  const response = await fetch(url);
+  console.log("Geocoding request:", url);
 
-  if (!response.ok) {
-    throw new Error("Network response was not ok.");
-  }
-
-  const data = await response.json();
+  const data = await fetchWithTimeout(url);
 
   if (!data.results || data.results.length === 0) {
     throw new CityNotFoundError();
@@ -54,8 +78,8 @@ async function searchCity(cityName) {
 }
 
 /**
- * Step 2: Fetch weather data for the given coordinates.
- * We request fields needed for Milestones 3 and 4 as well.
+ * Step 2: Coordinates → weather data
+ * Docs: https://open-meteo.com/en/docs
  */
 async function getForecast(latitude, longitude) {
   const params = new URLSearchParams({
@@ -70,17 +94,14 @@ async function getForecast(latitude, longitude) {
   });
 
   const url = `${FORECAST_URL}?${params.toString()}`;
-  const response = await fetch(url);
 
-  if (!response.ok) {
-    throw new Error("Network response was not ok.");
-  }
+  console.log("Forecast request:", url);
 
-  return response.json();
+  return fetchWithTimeout(url);
 }
 
 /**
- * Main exported function: city name → location + forecast data.
+ * Main function: city name → { location, forecast }
  */
 export async function fetchWeatherByCity(cityName) {
   const trimmedCity = cityName.trim();
@@ -90,7 +111,10 @@ export async function fetchWeatherByCity(cityName) {
   }
 
   const location = await searchCity(trimmedCity);
+  console.log("City found:", location);
+
   const forecast = await getForecast(location.latitude, location.longitude);
+  console.log("Forecast received for:", location.name);
 
   return {
     location,

@@ -7,9 +7,6 @@ import {
   EmptySearchError,
 } from "./api.js";
 
-/**
- * Wire up the theme toggle button.
- */
 function initThemeToggle() {
   const toggleBtn = document.getElementById("theme-toggle");
 
@@ -22,9 +19,6 @@ function initThemeToggle() {
   });
 }
 
-/**
- * Prevent non-functional nav links from jumping to top of page.
- */
 function initNavLinks() {
   const navLinks = document.querySelectorAll(".nav__link:not(.nav__link--active)");
 
@@ -35,9 +29,6 @@ function initNavLinks() {
   });
 }
 
-/**
- * Show the error banner with a message.
- */
 function showError(message) {
   const errorBanner = document.getElementById("error-banner");
   const errorMessage = document.getElementById("error-message");
@@ -48,9 +39,6 @@ function showError(message) {
   errorBanner.hidden = false;
 }
 
-/**
- * Hide the error banner and clear its message.
- */
 function hideError() {
   const errorBanner = document.getElementById("error-banner");
   const errorMessage = document.getElementById("error-message");
@@ -61,9 +49,6 @@ function hideError() {
   errorBanner.hidden = true;
 }
 
-/**
- * Show or hide the loading spinner and disable the search form.
- */
 function setLoading(isLoading) {
   const loadingIndicator = document.getElementById("loading-indicator");
   const searchForm = document.getElementById("search-form");
@@ -87,36 +72,37 @@ function setLoading(isLoading) {
   }
 }
 
-/**
- * Handle the full search flow: loading → API → log or error.
- */
 async function handleSearch(cityName) {
   hideError();
   setLoading(true);
 
+  console.log("Search started for:", cityName);
+
   try {
     const weatherData = await fetchWeatherByCity(cityName);
 
-    // Milestone 2 deliverable: log data to console
-    // Milestone 3 will use this data to render the weather card
+    // Milestone 2: log data — Milestone 3 will render it on screen
     console.log("Weather data:", weatherData);
   } catch (error) {
+    console.error("Search failed:", error);
+
     if (error instanceof EmptySearchError) {
       showError(error.message);
     } else if (error instanceof CityNotFoundError) {
       showError("City not found. Try a different name.");
+    } else if (error.message && error.message.includes("timed out")) {
+      showError(error.message);
     } else {
-      showError("Unable to fetch weather. Check your connection and try again.");
-      console.error("Search error:", error);
+      showError(
+        "Unable to fetch weather. Open the app with Live Server (not file://) and check your connection."
+      );
     }
   } finally {
     setLoading(false);
+    console.log("Search finished.");
   }
 }
 
-/**
- * Wire up the search form submit handler.
- */
 function initSearchForm() {
   const form = document.getElementById("search-form");
   const cityInput = document.getElementById("city-input");
@@ -129,13 +115,11 @@ function initSearchForm() {
   });
 }
 
-// ── Boot ──
 document.addEventListener("DOMContentLoaded", () => {
-  // 1. Restore saved theme immediately (prevents flash of wrong theme)
   applyTheme(getSavedTheme());
-
-  // 2. Wire up interactive elements
   initThemeToggle();
   initNavLinks();
   initSearchForm();
+
+  console.log("Weather App ready. Use Live Server — URL must start with http://");
 });
