@@ -31,19 +31,18 @@ function initNavLinks() {
 }
 
 /**
- * Prevent search form from submitting (M2 will add real search logic).
+ * Prevent search form from reloading the page.
+ * Search logic will be added in the next step.
  */
 function initSearchForm() {
-  const form = document.getElementById("search-form");
-
-  if (!form) return;
-
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-    // Milestone 2: add search logic here
-    //console.log("Search will be implemented in Milestone 2");
-  });
-}
+    const form = document.getElementById("search-form");
+  
+    if (!form) return;
+  
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+    });
+  }
 
 // ── Boot ──
 document.addEventListener("DOMContentLoaded", () => {

@@ -167,31 +167,23 @@
     padding-bottom: 32px;
   }
   
-    /* ── EMPTY STATE (before any search) ── */
-    .empty-state {
-        margin-top: 32px;
-        text-align: center;
-        font-size: 0.9rem;
-        color: var(--color-text-muted);
-        line-height: 1.6;
-        padding: 0 16px;
-      }
-    
-      /* ── WEATHER CONTENT (hidden until data loads) ── */
-      .weather-content {
-        margin-top: 16px;
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-      }
-    
-      /* These containers stay empty and invisible in Milestone 1.
-         You will style and fill them when building the weather cards. */
-      .current-weather,
-      .forecast-strip,
-      .hourly-insights {
-        /* Intentionally empty for now */
-      }
+  /* Empty state shown before any city is searched */
+  .empty-state {
+    margin-top: 32px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+    padding: 0 16px;
+  }
+  
+  /* Weather content wrapper — hidden via HTML hidden attribute until data loads */
+  .weather-content {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
   
   /* ── FOOTER ── */
   .footer {
