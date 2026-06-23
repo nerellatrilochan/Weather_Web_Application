@@ -77,6 +77,21 @@
             placeholder="Search for a city or meteorological station..."
             autocomplete="off"
           />
+
+          <!-- Clear / reset button — visible only when a city is loaded -->
+          <button
+            type="button"
+            id="clear-city-btn"
+            class="search-form__clear"
+            hidden
+            aria-label="Clear saved city and reset"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+
           <button type="submit" class="search-form__button">
             <!-- Magnifying glass icon -->
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -106,7 +121,7 @@
         Search for a city to see current weather, forecast, and hourly insights.
       </p>
 
-      <!-- Weather content — hidden until search returns data (built in later steps) -->
+      <!-- Weather content — hidden until search returns data -->
       <section id="weather-content" class="weather-content" hidden aria-live="polite">
 
         <article id="current-weather" class="current-weather" aria-label="Current weather">
@@ -114,11 +129,11 @@
         </article>
 
         <section id="forecast-strip" class="forecast-strip" aria-label="5-day forecast" hidden>
-            <!-- Populated in Milestone 4 -->
+          <!-- Populated in Milestone 4 -->
         </section>
 
         <section id="hourly-insights" class="hourly-insights" aria-label="Hourly micro-data insights" hidden>
-            <!-- Populated in Milestone 4 -->
+          <!-- Populated in Milestone 4 -->
         </section>
 
       </section>

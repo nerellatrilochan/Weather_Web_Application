@@ -134,6 +134,39 @@
     box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2);
   }
   
+  /* Milestone 5 — clear button inside search bar */
+  .search-form__clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    margin: auto 2px auto 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+  
+  .search-form__clear svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .search-form__clear:hover {
+    color: var(--color-text-primary);
+    background-color: var(--color-stat-badge-bg);
+  }
+  
+  .search-form__clear:focus-visible {
+    outline: 2px solid var(--color-accent-orange);
+    outline-offset: 2px;
+  }
+  
   .search-form__button {
     display: flex;
     align-items: center;
@@ -287,6 +320,7 @@
   .clear-city-btn svg {
     width: 18px;
     height: 18px;
+    pointer-events: none;
   }
   
   .clear-city-btn:hover {

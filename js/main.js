@@ -12,7 +12,7 @@ import {
   renderForecastStrip,
   renderHourlyInsights,
   showWeatherContent,
-  hideWeatherContent,
+  resetToEmptyState,
 } from "./ui.js";
 
 function initThemeToggle() {
@@ -114,14 +114,16 @@ async function handleSearch(cityName) {
 
 function handleClearCity() {
   clearLastCity();
-  hideWeatherContent();
+  resetToEmptyState();
 
   const cityInput = document.getElementById("city-input");
   if (cityInput) {
     cityInput.value = "";
+    cityInput.disabled = false;
   }
 
   hideError();
+  setLoading(false);
 }
 
 function initSearchForm() {
@@ -137,15 +139,26 @@ function initSearchForm() {
 }
 
 function initClearCity() {
+  const searchClearBtn = document.getElementById("clear-city-btn");
+
+  if (searchClearBtn) {
+    searchClearBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      handleClearCity();
+    });
+  }
+
   const card = document.getElementById("current-weather");
 
-  if (!card) return;
-
-  card.addEventListener("click", (event) => {
-    if (event.target.closest(".clear-city-btn")) {
-      handleClearCity();
-    }
-  });
+  if (card) {
+    card.addEventListener("click", (event) => {
+      if (event.target.closest(".clear-city-btn")) {
+        event.preventDefault();
+        handleClearCity();
+      }
+    });
+  }
 }
 
 function restoreLastCity() {
@@ -170,6 +183,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setLoading(false);
   hideError();
+  resetToEmptyState();
 
   restoreLastCity();
 });

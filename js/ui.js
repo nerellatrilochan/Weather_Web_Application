@@ -42,6 +42,13 @@ import {
     <line x1="6" y1="6" x2="18" y2="18"/>
   </svg>`;
   
+  function setSearchClearVisible(isVisible) {
+    const clearBtn = document.getElementById("clear-city-btn");
+    if (clearBtn) {
+      clearBtn.hidden = !isVisible;
+    }
+  }
+  
   /**
    * Show weather sections, hide empty-state hint.
    */
@@ -51,21 +58,26 @@ import {
   
     if (emptyState) emptyState.hidden = true;
     if (weatherContent) weatherContent.hidden = false;
+  
+    setSearchClearVisible(true);
   }
   
   /**
-   * Hide weather sections, show empty-state hint.
-   * Used when the user clears the saved city.
+   * Reset the UI back to the default empty state.
+   * Clears all weather sections and shows the empty-state hint.
    */
-  export function hideWeatherContent() {
+  export function resetToEmptyState() {
     const emptyState = document.getElementById("empty-state");
     const weatherContent = document.getElementById("weather-content");
     const currentWeather = document.getElementById("current-weather");
     const forecastStrip = document.getElementById("forecast-strip");
     const hourlyInsights = document.getElementById("hourly-insights");
+    const loadingIndicator = document.getElementById("loading-indicator");
+    const searchForm = document.getElementById("search-form");
   
-    if (emptyState) emptyState.hidden = false;
     if (weatherContent) weatherContent.hidden = true;
+    if (emptyState) emptyState.hidden = false;
+  
     if (currentWeather) currentWeather.innerHTML = "";
     if (forecastStrip) {
       forecastStrip.innerHTML = "";
@@ -75,6 +87,11 @@ import {
       hourlyInsights.innerHTML = "";
       hourlyInsights.hidden = true;
     }
+  
+    if (loadingIndicator) loadingIndicator.hidden = true;
+    if (searchForm) searchForm.classList.remove("search-form--loading");
+  
+    setSearchClearVisible(false);
   }
   
   /**
