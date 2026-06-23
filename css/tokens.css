@@ -33,6 +33,7 @@
   /* Borders & shadows */
   --color-border: #e2e8f0;
   --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-card-hover: 0 8px 20px rgba(0, 0, 0, 0.12);
   --shadow-header: 0 2px 8px rgba(0, 0, 0, 0.15);
 
   /* Shape */
@@ -42,10 +43,12 @@
 
   /* Layout */
   --max-width: 700px;
+  --bp-mobile: 480px;
+  --bp-tablet: 768px;
 
-  /* Transitions (used more in M6, defined here for consistency) */
+  /* Transitions */
   --transition-theme: background-color 0.25s ease, color 0.25s ease,
-    border-color 0.25s ease;
+    border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 /* ── Dark theme ── */
@@ -75,5 +78,6 @@
 
   --color-border: #2e2e42;
   --shadow-card: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.45);
   --shadow-header: 0 2px 8px rgba(0, 0, 0, 0.4);
 }

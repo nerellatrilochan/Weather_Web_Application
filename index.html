@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Weather App</title>
 
-    <!-- Google Font (optional but matches reference design) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,34 +12,65 @@
       rel="stylesheet"
     />
 
-    <!-- Stylesheets — order matters: tokens first, then base, then components -->
     <link rel="stylesheet" href="css/tokens.css" />
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/responsive.css" />
   </head>
 
   <body>
-    <!-- ══════════════════════════════════════
-         HEADER
-    ══════════════════════════════════════ -->
     <header class="header">
       <div class="header__inner app-container">
         <span class="header__logo">Weather App</span>
 
-        <nav class="nav" aria-label="Main navigation">
+        <button
+          id="nav-toggle"
+          class="nav-toggle"
+          type="button"
+          aria-label="Open navigation menu"
+          aria-expanded="false"
+          aria-controls="main-nav"
+        >
+          <svg
+            class="nav-toggle__icon nav-toggle__icon--menu"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+          >
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+          <svg
+            class="nav-toggle__icon nav-toggle__icon--close"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+
+        <nav id="main-nav" class="nav" aria-label="Main navigation">
           <a href="#" class="nav__link nav__link--active">Dashboard</a>
           <a href="#" class="nav__link">Map</a>
           <a href="#" class="nav__link">Education</a>
           <a href="#" class="nav__link">Historical</a>
         </nav>
 
-        <!-- Theme toggle: sun = currently light (click → dark), moon = currently dark -->
         <button
           id="theme-toggle"
           class="theme-toggle"
           aria-label="Toggle dark/light theme"
         >
-          <!-- Sun icon (visible in light mode) -->
           <svg class="theme-toggle__sun" viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="5" />
             <line x1="12" y1="1" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" />
@@ -52,8 +82,6 @@
             <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" />
             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none" />
           </svg>
-
-          <!-- Moon icon (visible in dark mode) -->
           <svg class="theme-toggle__moon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
           </svg>
@@ -61,12 +89,7 @@
       </div>
     </header>
 
-    <!-- ══════════════════════════════════════
-         MAIN
-    ══════════════════════════════════════ -->
     <main class="main app-container">
-
-      <!-- Search bar -->
       <section class="search-section" aria-label="City search">
         <form id="search-form" class="search-form" role="search">
           <label for="city-input" class="sr-only">Search for a city</label>
@@ -78,7 +101,6 @@
             autocomplete="off"
           />
 
-          <!-- Clear / reset button — visible only when a city is loaded -->
           <button
             type="button"
             id="clear-city-btn"
@@ -93,56 +115,39 @@
           </button>
 
           <button type="submit" class="search-form__button">
-            <!-- Magnifying glass icon -->
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5
                 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79
                 l5 4.99L20.49 19l-4.99-5zm-6 0C8.01 14 6 11.99
                 6 9.5S8.01 5 10.5 5 15 7.01 15 9.5 12.99 14 10.5 14z" />
             </svg>
-            SEARCH
+            <span class="search-form__button-text">SEARCH</span>
           </button>
         </form>
 
-        <!-- Error banner — shown when search fails -->
         <div id="error-banner" class="error-banner" role="alert" hidden>
           <span id="error-message"></span>
         </div>
 
-        <!-- Loading spinner — shown while fetching data -->
         <div id="loading-indicator" class="loading-indicator" hidden aria-live="polite">
           <div class="spinner" aria-hidden="true"></div>
           <span>Fetching weather data...</span>
         </div>
       </section>
 
-      <!-- Friendly hint shown before any city is searched -->
       <p id="empty-state" class="empty-state">
         Search for a city to see current weather, forecast, and hourly insights.
       </p>
 
-      <!-- Weather content — hidden until search returns data -->
       <section id="weather-content" class="weather-content" hidden aria-live="polite">
+        <article id="current-weather" class="current-weather" aria-label="Current weather"></article>
 
-        <article id="current-weather" class="current-weather" aria-label="Current weather">
-          <!-- Populated after search -->
-        </article>
+        <section id="forecast-strip" class="forecast-strip" aria-label="5-day forecast" hidden></section>
 
-        <section id="forecast-strip" class="forecast-strip" aria-label="5-day forecast" hidden>
-          <!-- Populated in Milestone 4 -->
-        </section>
-
-        <section id="hourly-insights" class="hourly-insights" aria-label="Hourly micro-data insights" hidden>
-          <!-- Populated in Milestone 4 -->
-        </section>
-
+        <section id="hourly-insights" class="hourly-insights" aria-label="Hourly micro-data insights" hidden></section>
       </section>
-
     </main>
 
-    <!-- ══════════════════════════════════════
-         FOOTER
-    ══════════════════════════════════════ -->
     <footer class="footer">
       <div class="footer__inner app-container">
         <div>
@@ -160,7 +165,6 @@
       </div>
     </footer>
 
-    <!-- JavaScript — type="module" enables import/export between files -->
     <script type="module" src="js/main.js"></script>
   </body>
 </html>

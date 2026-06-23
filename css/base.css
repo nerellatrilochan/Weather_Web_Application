@@ -11,6 +11,8 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  background-color: var(--color-bg);
+  transition: var(--transition-theme);
 }
 
 body {
@@ -25,7 +27,6 @@ body {
   transition: var(--transition-theme);
 }
 
-/* Centered content wrapper — max 700px per spec */
 .app-container {
   width: 100%;
   max-width: var(--max-width);
@@ -33,7 +34,6 @@ body {
   padding: 0 16px;
 }
 
-/* Utility: visually hidden but accessible to screen readers */
 .sr-only {
   position: absolute;
   width: 1px;
@@ -46,10 +46,6 @@ body {
   border: 0;
 }
 
-/*
-  IMPORTANT: Elements with the HTML hidden attribute must stay hidden
-  even when component CSS sets display:flex (e.g. loading spinner).
-*/
 [hidden] {
   display: none !important;
 }

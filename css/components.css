@@ -26,6 +26,49 @@
     flex-shrink: 0;
   }
   
+  /* Mobile nav toggle — hidden by default, shown in responsive.css */
+  .nav-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    color: var(--color-text-on-dark);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .nav-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav-toggle:focus-visible {
+    outline: 2px solid var(--color-accent-orange);
+    outline-offset: 2px;
+  }
+  
+  .nav-toggle__icon {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .nav-toggle__icon--close {
+    display: none;
+  }
+  
+  .nav-toggle[aria-expanded="true"] .nav-toggle__icon--menu {
+    display: none;
+  }
+  
+  .nav-toggle[aria-expanded="true"] .nav-toggle__icon--close {
+    display: block;
+  }
+  
   /* Navigation */
   .nav {
     display: flex;
@@ -47,13 +90,19 @@
     color: var(--color-text-nav-active);
   }
   
+  .nav__link:focus-visible {
+    outline: 2px solid var(--color-accent-orange);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+  
   .nav__link--active {
     color: var(--color-text-nav-active);
     border-bottom-color: var(--color-accent-orange-nav);
     font-weight: 600;
   }
   
-  /* Theme toggle button */
+  /* Theme toggle */
   .theme-toggle {
     background: none;
     border: none;
@@ -83,7 +132,6 @@
     fill: currentColor;
   }
   
-  /* Show sun in light mode, moon in dark mode */
   [data-theme="light"] .theme-toggle__moon,
   [data-theme="dark"] .theme-toggle__sun {
     display: none;
@@ -97,12 +145,13 @@
   .search-form {
     display: flex;
     align-items: stretch;
+    width: 100%;
     background-color: var(--color-surface);
     border-radius: var(--radius-pill);
     box-shadow: var(--shadow-card);
     overflow: hidden;
     border: 1px solid var(--color-border);
-    transition: var(--transition-theme), opacity 0.2s ease;
+    transition: var(--transition-theme), opacity 0.2s ease, box-shadow 0.2s ease;
   }
   
   .search-form--loading {
@@ -119,6 +168,7 @@
     background: transparent;
     color: var(--color-text-primary);
     min-width: 0;
+    transition: opacity 0.2s ease;
   }
   
   .search-form__input::placeholder {
@@ -129,12 +179,16 @@
     outline: none;
   }
   
+  .search-form__input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
   .search-form:focus-within {
     border-color: var(--color-accent-teal);
     box-shadow: 0 0 0 3px rgba(42, 157, 143, 0.2);
   }
   
-  /* Milestone 5 — clear button inside search bar */
   .search-form__clear {
     display: flex;
     align-items: center;
@@ -195,16 +249,17 @@
   
   .search-form__button:disabled {
     cursor: not-allowed;
-    opacity: 0.8;
+    opacity: 0.65;
   }
   
   .search-form__button svg {
     width: 16px;
     height: 16px;
     fill: currentColor;
+    flex-shrink: 0;
   }
   
-  /* Error banner — only visible when hidden attribute is removed */
+  /* Error banner */
   .error-banner:not([hidden]) {
     display: block;
     margin-top: 12px;
@@ -218,7 +273,7 @@
     transition: var(--transition-theme);
   }
   
-  /* Loading indicator — only visible when hidden attribute is removed */
+  /* Loading indicator */
   .loading-indicator:not([hidden]) {
     display: flex;
     align-items: center;
@@ -250,7 +305,6 @@
     padding-bottom: 32px;
   }
   
-  /* Empty state shown before any city is searched */
   .empty-state {
     margin-top: 32px;
     text-align: center;
@@ -260,7 +314,6 @@
     padding: 0 16px;
   }
   
-  /* Weather content — only visible when hidden attribute is removed */
   .weather-content:not([hidden]) {
     display: flex;
     flex-direction: column;
@@ -268,21 +321,20 @@
     margin-top: 16px;
   }
   
-  /* ── CURRENT WEATHER CARD (Milestone 3) ── */
+  /* ── CURRENT WEATHER CARD ── */
   .current-weather {
     background-color: var(--color-surface);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-card);
     padding: 24px;
     border: 1px solid var(--color-border);
-    transition: var(--transition-theme);
+    transition: var(--transition-theme), transform 0.2s ease, box-shadow 0.2s ease;
   }
   
   .current-weather__header {
     margin-bottom: 20px;
   }
   
-  /* Milestone 5 — city name + clear button row */
   .current-weather__title-row {
     display: flex;
     align-items: flex-start;
@@ -380,7 +432,6 @@
     margin-left: 2px;
   }
   
-  /* Temperature accent colors */
   .temp--cold .current-weather__temp-value,
   .temp--cold .current-weather__temp-unit {
     color: var(--color-temp-cold);
@@ -438,7 +489,7 @@
     background-color: var(--color-stat-badge-bg);
     border-radius: var(--radius-sm);
     padding: 10px 14px;
-    transition: var(--transition-theme);
+    transition: var(--transition-theme), background-color 0.2s ease;
   }
   
   .stat-badge__icon {
@@ -467,22 +518,21 @@
     white-space: nowrap;
   }
   
-  /* Stack stat badges below temp on very small screens */
-  @media (max-width: 480px) {
-    .current-weather__body {
-      flex-direction: column;
+  /* Card hover lift — pointer devices only */
+  @media (hover: hover) {
+    .current-weather:hover,
+    .forecast-card:hover,
+    .hourly-insights:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-card-hover);
     }
   
-    .current-weather__stats {
-      width: 100%;
-    }
-  
-    .current-weather__temp-value {
-      font-size: 3rem;
+    .stat-badge:hover {
+      background-color: var(--color-border);
     }
   }
   
-  /* ── FORECAST STRIP (Milestone 4) ── */
+  /* ── FORECAST STRIP ── */
   .forecast-strip:not([hidden]) {
     display: flex;
     gap: 10px;
@@ -502,7 +552,7 @@
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-card);
     text-align: center;
-    transition: var(--transition-theme);
+    transition: var(--transition-theme), transform 0.2s ease, box-shadow 0.2s ease;
   }
   
   .forecast-card--today {
@@ -549,7 +599,7 @@
     margin: 0;
   }
   
-  /* ── HOURLY INSIGHTS PANEL (Milestone 4) ── */
+  /* ── HOURLY INSIGHTS PANEL ── */
   .hourly-insights:not([hidden]) {
     display: block;
   }
@@ -560,7 +610,7 @@
     box-shadow: var(--shadow-card);
     padding: 24px;
     border: 1px solid var(--color-border);
-    transition: var(--transition-theme);
+    transition: var(--transition-theme), transform 0.2s ease, box-shadow 0.2s ease;
   }
   
   .hourly-insights__header {
@@ -602,6 +652,7 @@
     gap: 12px;
     padding: 14px 0;
     border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.2s ease;
   }
   
   .hourly-insights__row:last-child {

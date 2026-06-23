@@ -15,6 +15,8 @@ import {
   resetToEmptyState,
 } from "./ui.js";
 
+const MOBILE_NAV_BREAKPOINT = 480;
+
 function initThemeToggle() {
   const toggleBtn = document.getElementById("theme-toggle");
 
@@ -27,8 +29,68 @@ function initThemeToggle() {
   });
 }
 
+function closeNavMenu(nav, navToggle) {
+  if (!nav || !navToggle) return;
+
+  nav.classList.remove("nav--open");
+  navToggle.setAttribute("aria-expanded", "false");
+  navToggle.setAttribute("aria-label", "Open navigation menu");
+}
+
+function openNavMenu(nav, navToggle) {
+  if (!nav || !navToggle) return;
+
+  nav.classList.add("nav--open");
+  navToggle.setAttribute("aria-expanded", "true");
+  navToggle.setAttribute("aria-label", "Close navigation menu");
+}
+
+function initNavToggle() {
+  const navToggle = document.getElementById("nav-toggle");
+  const nav = document.getElementById("main-nav");
+  const header = document.querySelector(".header");
+
+  if (!navToggle || !nav) return;
+
+  navToggle.addEventListener("click", () => {
+    const isOpen = nav.classList.contains("nav--open");
+
+    if (isOpen) {
+      closeNavMenu(nav, navToggle);
+    } else {
+      openNavMenu(nav, navToggle);
+    }
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!nav.classList.contains("nav--open")) return;
+    if (header && header.contains(event.target)) return;
+    closeNavMenu(nav, navToggle);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeNavMenu(nav, navToggle);
+    }
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth >= MOBILE_NAV_BREAKPOINT) {
+      closeNavMenu(nav, navToggle);
+    }
+  });
+
+  nav.querySelectorAll(".nav__link").forEach((link) => {
+    link.addEventListener("click", () => {
+      closeNavMenu(nav, navToggle);
+    });
+  });
+}
+
 function initNavLinks() {
-  const navLinks = document.querySelectorAll(".nav__link:not(.nav__link--active)");
+  const navLinks = document.querySelectorAll(
+    ".nav__link:not(.nav__link--active)"
+  );
 
   navLinks.forEach((link) => {
     link.addEventListener("click", (event) => {
@@ -177,6 +239,7 @@ function restoreLastCity() {
 document.addEventListener("DOMContentLoaded", () => {
   applyTheme(getSavedTheme());
   initThemeToggle();
+  initNavToggle();
   initNavLinks();
   initSearchForm();
   initClearCity();
