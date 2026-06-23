@@ -121,5 +121,9 @@ document.addEventListener("DOMContentLoaded", () => {
   initNavLinks();
   initSearchForm();
 
-  console.log("Weather App ready. Use Live Server — URL must start with http://");
+  // Ensure feedback UI starts hidden on page load
+  setLoading(false);
+  hideError();
+
+  console.log("Weather App ready.");
 });

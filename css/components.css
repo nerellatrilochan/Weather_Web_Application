@@ -171,8 +171,9 @@
     fill: currentColor;
   }
   
-  /* Error banner */
-  .error-banner {
+  /* Error banner — only visible when hidden attribute is removed */
+  .error-banner:not([hidden]) {
+    display: block;
     margin-top: 12px;
     padding: 12px 16px;
     border-radius: var(--radius-md);
@@ -184,8 +185,8 @@
     transition: var(--transition-theme);
   }
   
-  /* Loading indicator */
-  .loading-indicator {
+  /* Loading indicator — only visible when hidden attribute is removed */
+  .loading-indicator:not([hidden]) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -226,12 +227,12 @@
     padding: 0 16px;
   }
   
-  /* Weather content wrapper — hidden via HTML hidden attribute until data loads */
-  .weather-content {
-    margin-top: 16px;
+  /* Weather content — only visible when hidden attribute is removed */
+  .weather-content:not([hidden]) {
     display: flex;
     flex-direction: column;
     gap: 16px;
+    margin-top: 16px;
   }
   
   /* ── FOOTER ── */

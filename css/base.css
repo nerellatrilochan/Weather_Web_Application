@@ -45,3 +45,11 @@ body {
   white-space: nowrap;
   border: 0;
 }
+
+/*
+  IMPORTANT: Elements with the HTML hidden attribute must stay hidden
+  even when component CSS sets display:flex (e.g. loading spinner).
+*/
+[hidden] {
+  display: none !important;
+}
