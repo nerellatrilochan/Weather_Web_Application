@@ -6,7 +6,12 @@ import {
   CityNotFoundError,
   EmptySearchError,
 } from "./api.js";
-import { renderCurrentWeather, showWeatherContent } from "./ui.js";
+import {
+  renderCurrentWeather,
+  renderForecastStrip,
+  renderHourlyInsights,
+  showWeatherContent,
+} from "./ui.js";
 
 function initThemeToggle() {
   const toggleBtn = document.getElementById("theme-toggle");
@@ -81,6 +86,8 @@ async function handleSearch(cityName) {
     const weatherData = await fetchWeatherByCity(cityName);
 
     renderCurrentWeather(weatherData.location, weatherData.forecast);
+    renderForecastStrip(weatherData.forecast, weatherData.location.timezone);
+    renderHourlyInsights(weatherData.forecast, weatherData.location.timezone);
     showWeatherContent();
   } catch (error) {
     console.error("Search failed:", error);

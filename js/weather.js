@@ -136,3 +136,97 @@ const WEATHER_ICONS = {
   export function formatTemperature(value) {
     return Math.round(Number(value));
   }
+  
+  /**
+   * One decimal place for hourly insights panel (e.g. 12.4°C).
+   */
+  export function formatHourlyTemperature(value) {
+    return Number(value).toFixed(1);
+  }
+  
+  /**
+   * Parse Open-Meteo local ISO strings (e.g. "2024-10-24T14:00").
+   * API times are already in the location's timezone.
+   */
+  function parseLocalIso(isoTime) {
+    const [dateKey, timePart = "00:00"] = String(isoTime).split("T");
+    const hour = parseInt(timePart.slice(0, 2), 10);
+    const minute = parseInt(timePart.slice(3, 5), 10) || 0;
+  
+    return { dateKey, hour, minute };
+  }
+  
+  /**
+   * Format hourly time → "14:00" from API local ISO string.
+   */
+  export function formatHourLabel(isoTime) {
+    const { hour, minute } = parseLocalIso(isoTime);
+    const h = String(hour).padStart(2, "0");
+    const m = String(minute).padStart(2, "0");
+    return `${h}:${m}`;
+  }
+  
+  /**
+   * Build 5 forecast day objects from API daily data.
+   */
+  export function buildDailyForecast(daily, timezone) {
+    if (!daily || !Array.isArray(daily.time)) {
+      return [];
+    }
+  
+    return daily.time.slice(0, 5).map((dateStr, index) => {
+      const isToday = index === 0;
+  
+      let dayLabel;
+      if (isToday) {
+        dayLabel = "TODAY";
+      } else {
+        const date = new Date(`${dateStr}T12:00:00`);
+        const options = { weekday: "short" };
+        if (timezone) {
+          options.timeZone = timezone;
+        }
+        dayLabel = new Intl.DateTimeFormat("en-US", options)
+          .format(date)
+          .toUpperCase();
+      }
+  
+      return {
+        dayLabel,
+        isToday,
+        weatherCode: daily.weather_code[index],
+        high: formatTemperature(daily.temperature_2m_max[index]),
+        low: formatTemperature(daily.temperature_2m_min[index]),
+        dateStr,
+      };
+    });
+  }
+  
+  /**
+   * Build up to 6 hourly entries for the current local day.
+   */
+  export function buildHourlyInsights(hourly, currentTime) {
+    if (!hourly || !Array.isArray(hourly.time) || !currentTime) {
+      return [];
+    }
+  
+    const { dateKey: todayKey, hour: currentHour } = parseLocalIso(currentTime);
+    const entries = [];
+  
+    for (let i = 0; i < hourly.time.length && entries.length < 6; i += 1) {
+      const isoTime = hourly.time[i];
+      const { dateKey, hour } = parseLocalIso(isoTime);
+  
+      if (dateKey !== todayKey) continue;
+      if (hour < currentHour) continue;
+  
+      entries.push({
+        isoTime,
+        timeLabel: formatHourLabel(isoTime),
+        weatherCode: hourly.weather_code[i],
+        temperature: hourly.temperature_2m[i],
+      });
+    }
+  
+    return entries;
+  }

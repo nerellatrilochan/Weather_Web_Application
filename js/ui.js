@@ -5,9 +5,12 @@ import {
     getTempAccentClass,
     formatCurrentDate,
     formatTemperature,
+    formatHourlyTemperature,
+    buildDailyForecast,
+    buildHourlyInsights,
   } from "./weather.js";
   
-  /* ── Small inline SVGs for stat badges & date ── */
+  /* ── Small inline SVGs for stat badges, date & chart icon ── */
   
   const ICON_CALENDAR = `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <rect x="3" y="4" width="18" height="18" rx="2"/>
@@ -30,6 +33,10 @@ import {
     <polyline points="7 14 12 19 17 14"/>
   </svg>`;
   
+  const ICON_CHART = `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+  </svg>`;
+  
   /**
    * Show weather sections, hide empty-state hint.
    */
@@ -43,16 +50,26 @@ import {
   
   /**
    * Hide weather sections, show empty-state hint.
-   * (Used in Milestone 5 for reset — defined now for consistency.)
+   * (Used in Milestone 5 for reset.)
    */
   export function hideWeatherContent() {
     const emptyState = document.getElementById("empty-state");
     const weatherContent = document.getElementById("weather-content");
     const currentWeather = document.getElementById("current-weather");
+    const forecastStrip = document.getElementById("forecast-strip");
+    const hourlyInsights = document.getElementById("hourly-insights");
   
     if (emptyState) emptyState.hidden = false;
     if (weatherContent) weatherContent.hidden = true;
     if (currentWeather) currentWeather.innerHTML = "";
+    if (forecastStrip) {
+      forecastStrip.innerHTML = "";
+      forecastStrip.hidden = true;
+    }
+    if (hourlyInsights) {
+      hourlyInsights.innerHTML = "";
+      hourlyInsights.hidden = true;
+    }
   }
   
   /**
@@ -120,4 +137,78 @@ import {
         </ul>
       </div>
     `;
+  }
+  
+  /**
+   * Build and inject the 5-day forecast strip.
+   */
+  export function renderForecastStrip(forecast, timezone) {
+    const strip = document.getElementById("forecast-strip");
+    if (!strip) return;
+  
+    const days = buildDailyForecast(forecast.daily, timezone);
+  
+    const cardsHtml = days
+      .map((day) => {
+        const { iconSvg } = getWeatherInfo(day.weatherCode);
+        const todayClass = day.isToday ? " forecast-card--today" : "";
+  
+        return `
+          <article class="forecast-card${todayClass}" aria-label="${day.dayLabel} forecast">
+            <p class="forecast-card__day">${day.dayLabel}</p>
+            <div class="forecast-card__icon">${iconSvg}</div>
+            <p class="forecast-card__high">${day.high}°</p>
+            <p class="forecast-card__low">${day.low}°</p>
+          </article>
+        `;
+      })
+      .join("");
+  
+    strip.innerHTML = cardsHtml;
+    strip.hidden = false;
+  }
+  
+  /**
+   * Build and inject the hourly micro-data insights panel.
+   */
+  export function renderHourlyInsights(forecast, timezone) {
+    const panel = document.getElementById("hourly-insights");
+    if (!panel) return;
+  
+    const entries = buildHourlyInsights(
+      forecast.hourly,
+      forecast.current.time
+    );
+  
+    const tempUnit = forecast.hourly_units?.temperature_2m || "°C";
+  
+    const rowsHtml = entries
+      .map((entry) => {
+        const { label, iconSvg } = getWeatherInfo(entry.weatherCode);
+        const temp = formatHourlyTemperature(entry.temperature);
+  
+        return `
+          <li class="hourly-insights__row">
+            <time class="hourly-insights__time" datetime="${entry.isoTime}">${entry.timeLabel}</time>
+            <div class="hourly-insights__condition">
+              ${iconSvg}
+              <span>${label}</span>
+            </div>
+            <span class="hourly-insights__temp">${temp}${tempUnit}</span>
+          </li>
+        `;
+      })
+      .join("");
+  
+    panel.innerHTML = `
+      <header class="hourly-insights__header">
+        <h3 class="hourly-insights__title">Hourly Micro-Data Insights</h3>
+        <span class="hourly-insights__chart-icon">${ICON_CHART}</span>
+      </header>
+      <ul class="hourly-insights__list">
+        ${rowsHtml}
+      </ul>
+    `;
+  
+    panel.hidden = false;
   }
