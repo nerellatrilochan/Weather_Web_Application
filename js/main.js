@@ -6,6 +6,7 @@ import {
   CityNotFoundError,
   EmptySearchError,
 } from "./api.js";
+import { renderCurrentWeather, showWeatherContent } from "./ui.js";
 
 function initThemeToggle() {
   const toggleBtn = document.getElementById("theme-toggle");
@@ -76,13 +77,11 @@ async function handleSearch(cityName) {
   hideError();
   setLoading(true);
 
-  console.log("Search started for:", cityName);
-
   try {
     const weatherData = await fetchWeatherByCity(cityName);
 
-    // Milestone 2: log data — Milestone 3 will render it on screen
-    console.log("Weather data:", weatherData);
+    renderCurrentWeather(weatherData.location, weatherData.forecast);
+    showWeatherContent();
   } catch (error) {
     console.error("Search failed:", error);
 
@@ -99,7 +98,6 @@ async function handleSearch(cityName) {
     }
   } finally {
     setLoading(false);
-    console.log("Search finished.");
   }
 }
 
@@ -121,9 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initNavLinks();
   initSearchForm();
 
-  // Ensure feedback UI starts hidden on page load
   setLoading(false);
   hideError();
-
-  console.log("Weather App ready.");
 });

@@ -22,6 +22,8 @@
   --color-accent-teal-hover: #238b7e;
   --color-accent-orange: #e76f51;
   --color-accent-orange-nav: #f4a261;
+  --color-temp-cold: #4ea8de;
+  --color-temp-hot: #d62828;
 
   /* Error */
   --color-error-bg: #fef2f2;
@@ -64,6 +66,8 @@
   --color-accent-teal-hover: #35a896;
   --color-accent-orange: #f4a261;
   --color-accent-orange-nav: #f4a261;
+  --color-temp-cold: #74c0fc;
+  --color-temp-hot: #ff6b6b;
 
   --color-error-bg: #3b1c1c;
   --color-error-text: #fca5a5;
